@@ -9,6 +9,7 @@ public class CurrentDate {
 
 	public static void main(String[] args) {
 		Date date = new Date();
+		date = date + 1;
 		System.out.println(date.toString());
 	}
 }
