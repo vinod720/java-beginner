@@ -1,47 +1,50 @@
 package tutorial_4.currency_converter;
 
-import java.io.File;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Scanner;
 
 public class Reader {
 	private Scanner sc;
-	ArrayList<Currency> currencies = new ArrayList<Currency>();
+	ArrayList<Currency> currencies = new ArrayList<>();
 
 	// 1st Step: open the file
-	public void openFile(){
-		try{
-			sc = new Scanner(new File("rates.txt"));
-		}
-		catch(Exception e){
-			System.out.println("ERROR: " + e);
+	public void openFile() {
+		try {
+			InputStream stream = Reader.class.getResourceAsStream("rates.txt");
+			if (stream == null) {
+				throw new IllegalStateException("rates.txt not found in classpath");
+			}
+			sc = new Scanner(stream);
+		} catch (Exception e) {
+			System.out.println("ERROR loading rates file: " + e.getMessage());
 		}
 	}
 
 	// 2nd Step: read lines from the file and store in ArrayList
 	public void readFile() {
-		while(sc.hasNext()){
+		if (sc == null) return;
+		while (sc.hasNext()) {
 			currencies.add(new Currency(sc.next(), Double.parseDouble(sc.next())));
 		}
 		sc.close();
 	}
 
-	public void printOut(){
-		for (int i = 0; i < currencies.size(); i++){
-			System.out.print(currencies.get(i).getName() + " ");
-			System.out.println(currencies.get(i).getRate());
+	public void printOut() {
+		for (Currency currency : currencies) {
+			System.out.println(currency.getName() + " " + currency.getRate());
 		}
 	}
 
-	public int sizeOf(){
+	public int sizeOf() {
 		return currencies.size();
 	}
 
-	public String getName(int i){
+	public String getName(int i) {
 		return currencies.get(i).getName();
 	}
 
-	public double getRate(int i){
+	public double getRate(int i) {
 		return currencies.get(i).getRate();
 	}
 }
